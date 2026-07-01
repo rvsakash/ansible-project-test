@@ -13,10 +13,10 @@ pipeline {
                 script {
                     echo "Current Branch Detected: ${env.BRANCH_NAME}"
                     
-                    // Yahan humne nfs-new branch ka naam daal diya hai
                     if (env.BRANCH_NAME == 'nfs' || env.BRANCH_NAME == 'nfs-new') {
-                        echo "Running NFS Server Installation..."
-                        sh "ansible-playbook -i nfs_hosts.in nfs.yml"
+                        echo "Running NFS Server Installation with Vault..."
+                        // Yahan humne vault password file ko jod diya hai
+                        sh "ansible-playbook -i nfs_hosts.in nfs.yml --vault-password-file vault_pass.txt"
                     } 
                     else if (env.BRANCH_NAME == 'httpd' || env.BRANCH_NAME == 'main') {
                         echo "Running Apache Deployment..."
