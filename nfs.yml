@@ -1,0 +1,47 @@
+---
+- name: Production Ready Automated NFS Server Configuration
+  hosts: nfs_clients
+  gather_facts: true
+  become: true  # Sudo privileges activate karne ke liye
+
+  # 1. Is line se playbook automatic vault.yml se password utha legi
+  vars_files:
+    - vault.yml
+
+  # 2. Saare variables jo playbook mein use ho rahe hain
+  vars:
+    nfs_packages:
+      - nfs-utils
+      - rpcbind
+    nfs_services:
+      - rpcbind
+      - nfs-server
+    
+    # Remote target execution user aur uska vault se encrypted password
+    ansible_user: hpuser
+    ansible_become_password: "{{ vault_hpuser_password }}"
+
+  # 3. Main Tasks jo perform honge
+  tasks:
+    - name: Step 1 - Safely Install NFS and Dependency Packages
+      ansible.builtin.package:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ nfs_packages }}"
+      # Agar package install ya update hoga, toh hi handler chalega
+      notify: Restart NFS Server System Service
+
+    - name: Step 2 - Ensure NFS Services are Started and Enabled on Boot
+      ansible.builtin.service:
+        name: "{{ item }}"
+        state: started
+        enabled: true
+      loop: "{{ nfs_services }}"
+
+  # 4. Handlers: Yeh tabhi chalega jab server mein koi badlav (change) hoga
+  handlers:
+    - name: Restart NFS Server System Service
+      ansible.builtin.service:
+        name: nfs-server
+        state: restarted
+
