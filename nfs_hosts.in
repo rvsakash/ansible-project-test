@@ -1,27 +1,2 @@
-#!/usr/bin/env python3
-import json
-import sys
-
-def get_dynamic_hosts():
-    # Yahaan humne aapki actual client IP daal di hai
-    active_clients = ["10.220.0.13"] 
-    
-    inventory = {
-        "nfs_clients": {
-            "hosts": active_clients,
-            "vars": {
-                "ansible_ssh_common_args": "-o StrictHostKeyChecking=no"
-            }
-        },
-        "_meta": {
-            "hostvars": {}
-        }
-    }
-    return inventory
-
-if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv == "--list":
-        print(json.dumps(get_dynamic_hosts(), indent=4))
-    else:
-        print(json.dumps({"_meta": {"hostvars": {}}}, indent=4))
-
+[nfs_clients]
+10.220.0.13
