@@ -1,2 +1,2 @@
 [nfs_clients]
-10.220.0.13
+10.220.0.13 ansible_user=hpuser
