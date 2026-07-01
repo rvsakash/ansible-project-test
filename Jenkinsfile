@@ -12,8 +12,9 @@ pipeline {
             steps {
                 script {
                     echo "Current Branch Detected: ${env.BRANCH_NAME}"
-
-                    if (env.BRANCH_NAME == 'nfs') {
+                    
+                    // Yahan humne nfs-new branch ka naam daal diya hai
+                    if (env.BRANCH_NAME == 'nfs' || env.BRANCH_NAME == 'nfs-new') {
                         echo "Running NFS Server Installation..."
                         sh "ansible-playbook -i nfs_hosts.in nfs.yml"
                     } 
