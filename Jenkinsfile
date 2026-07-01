@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -15,8 +16,8 @@ pipeline {
                     
                     if (env.BRANCH_NAME == 'nfs' || env.BRANCH_NAME == 'nfs-new') {
                         echo "Running NFS Server Installation with Vault..."
-                        // Yahan humne vault password file ko jod diya hai
-                        sh "ansible-playbook -i nfs_hosts.in nfs.yml --vault-password-file vault_pass.txt"
+                        // Yahan humne file ka poora absolute path de diya hai
+                        sh "ansible-playbook -i nfs_hosts.in nfs.yml --vault-password-file /opt/ansible-project-test/vault_pass.txt"
                     } 
                     else if (env.BRANCH_NAME == 'httpd' || env.BRANCH_NAME == 'main') {
                         echo "Running Apache Deployment..."
