@@ -1,0 +1,19 @@
+-e ---
+- name: Step 0 - Update Apt Cache
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Step 1 - Install NFS and Dependency Packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ nfs_packages }}"
+  notify: Restart NFS Server System Service
+
+- name: Step 2 - Ensure NFS Services are Started and Enabled on Boot
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  loop: "{{ nfs_services }}"
