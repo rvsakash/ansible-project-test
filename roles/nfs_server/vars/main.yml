@@ -1,6 +1,7 @@
--e ---
+---
 nfs_packages:
   - nfs-kernel-server
+  - rpcbind
 
 nfs_services:
   - rpcbind
