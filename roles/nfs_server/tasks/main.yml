@@ -1,4 +1,4 @@
--e ---
+---
 - name: Step 0 - Update Apt Cache
   ansible.builtin.apt:
     update_cache: yes
